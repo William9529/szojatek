@@ -26,12 +26,13 @@
         
         <div class="controls-grid">
             <button id="spin-btn" class="primary-btn">Random</button>
-            <button id="show-results-btn" class="secondary-btn" disabled>Megoldások</button>
-        </div>
+            
+            <div class="manual-section">
+                <input type="text" id="manual-input" maxlength="3" placeholder="Saját betűk">
+                <button id="manual-btn" class="accent-btn">Mehet</button>
+            </div>
 
-        <div class="manual-section">
-            <input type="text" id="manual-input" maxlength="3" placeholder="Saját betűk">
-            <button id="manual-btn" class="accent-btn">Mehet</button>
+            <button id="show-results-btn" class="secondary-btn" disabled>Megoldások</button>
         </div>
 
         <div id="stats" class="stats-badge hidden"></div>

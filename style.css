@@ -85,45 +85,50 @@ body {
     100% { transform: translateY(100%); }
 }
 
+/* Gombok egymás alatt */
 .controls-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     margin-bottom: 15px;
 }
 
 button {
+    width: 100%;
     border: none;
     border-radius: 12px;
-    padding: 15px 5px;
+    padding: 16px 5px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.1s;
+    transition: transform 0.1s, background-color 0.2s;
 }
 
-button:active { transform: scale(0.95); }
+button:active { transform: scale(0.98); }
 
 .primary-btn { background: var(--accent-orange); color: #000; }
 .secondary-btn { background: var(--accent-blue); color: white; }
-.secondary-btn:disabled { background: #334155; color: #64748b; }
-.accent-btn { background: var(--accent-purple); color: white; padding: 0 15px; }
+.secondary-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
+.accent-btn { background: var(--accent-purple); color: white; }
 
+/* Manuális beviteli mező és a "Mehet" gomb elrendezése */
 .manual-section {
     display: flex;
+    flex-direction: column;
     gap: 10px;
-    margin-bottom: 15px;
 }
 
 #manual-input {
-    flex-grow: 1;
+    width: 100%;
     background: var(--slot-bg);
     border: 1px solid #334155;
     border-radius: 12px;
     color: white;
-    padding: 12px;
+    padding: 14px;
     text-align: center;
     text-transform: uppercase;
+    font-size: 1.1rem;
+    letter-spacing: 4px;
 }
 
 .results-wrapper {
