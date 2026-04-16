@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 Betűs Szójáték</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Magyar Szójáték</h1>
+        <p>Alkoss szót a betűk sorrendjének megtartásával!</p>
+        
+        <div class="letters-box" id="letters">- - -</div>
+        
+        <div class="controls">
+            <button id="generate-btn">Új betűk generálása</button>
+            <button id="show-results-btn" disabled>Megoldások mutatása</button>
+        </div>
+
+        <div id="stats" class="stats">Kattints a generáláshoz!</div>
+        <ul id="results-list" class="hidden"></ul>
+    </div>
+
+    <script src="szavak.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
