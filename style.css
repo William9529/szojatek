@@ -1,7 +1,7 @@
 :root {
     --bg-color: #0f172a;
     --card-bg: #1e293b;
-    --accent-green: #10b981;
+    --accent-orange: #ff9800;
     --accent-blue: #3b82f6;
     --accent-purple: #8b5cf6;
     --text-main: #f8fafc;
@@ -9,128 +9,110 @@
     --slot-bg: #020617;
 }
 
+* { box-sizing: border-box; }
+
 body {
-    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-main);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100vh;
     margin: 0;
+    overflow-x: hidden;
+    padding: 10px;
 }
 
 .container {
     background-color: var(--card-bg);
-    padding: 40px;
+    padding: 20px;
     border-radius: 24px;
     box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
     text-align: center;
-    width: 440px;
+    width: 100%;
+    max-width: 440px;
     border: 1px solid rgba(255,255,255,0.1);
+    margin: 10px auto;
 }
 
-h1 {
-    font-size: 2rem;
-    margin: 0;
-    background: linear-gradient(to right, #60a5fa, #4ade80);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.main-title {
+    font-size: 1.5rem;
+    margin: 0 0 20px 0;
+    font-weight: 700;
 }
 
-.subtitle {
-    color: var(--text-dim);
-    font-size: 0.9rem;
-    margin-bottom: 20px;
-}
-
-/* Slot Modernizáció */
 .letters-box {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    margin: 30px 0;
-    padding: 20px;
-    background: var(--slot-bg);
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.05);
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .slot-container {
-    width: 90px;
-    height: 110px;
+    background: var(--slot-bg);
+    width: 80px;
+    height: 100px;
+    border-radius: 16px;
+    border: 2px solid #334155;
     overflow: hidden;
-    background-color: #1e293b;
-    border-radius: 12px;
     position: relative;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-.slot {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    width: 100%;
-    top: 0;
-}
-
-.letter {
-    font-size: 4.5rem;
-    font-weight: 800;
-    height: 110px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #fbbf24;
 }
 
-/* Pörgetés animáció */
-.spinning .slot {
-    animation: roll 0.1s linear infinite;
-}
-
-@keyframes roll {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-110px); }
-}
-
-/* Gombok egységesítése */
-.controls-grid {
+.reel {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 25px;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--accent-orange);
+    text-align: center;
+}
+
+/* Slot animáció */
+.slot.spinning .reel {
+    animation: slotSpin 0.1s linear infinite;
+    filter: blur(2px);
+}
+
+@keyframes slotSpin {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
 button {
-    height: 48px; /* Egységes magasság */
-    font-size: 1rem;
-    font-weight: 600;
     border: none;
     border-radius: 12px;
+    padding: 15px 5px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    width: 100%; /* Minden gomb egyforma széles a konténerben */
+    transition: transform 0.1s;
 }
 
-button:active { transform: scale(0.98); }
+button:active { transform: scale(0.95); }
 
-.primary-btn { background: var(--accent-green); color: white; }
-.primary-btn:hover { background: #059669; box-shadow: 0 0 15px rgba(16,185,129,0.4); }
-
+.primary-btn { background: var(--accent-orange); color: #000; }
 .secondary-btn { background: var(--accent-blue); color: white; }
-.secondary-btn:hover { background: #2563eb; }
-.secondary-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
+.secondary-btn:disabled { background: #334155; color: #64748b; }
+.accent-btn { background: var(--accent-purple); color: white; padding: 0 15px; }
 
-.accent-btn { background: var(--accent-purple); color: white; width: 100px; }
-
-/* Kézi bevitel */
 .manual-section {
     display: flex;
     gap: 10px;
-    padding-top: 25px;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 15px;
 }
 
 #manual-input {
@@ -139,43 +121,62 @@ button:active { transform: scale(0.98); }
     border: 1px solid #334155;
     border-radius: 12px;
     color: white;
-    padding: 0 15px;
-    font-size: 1.1rem;
+    padding: 12px;
     text-align: center;
     text-transform: uppercase;
 }
 
-/* Statisztika és lista */
-.stats-badge {
-    margin: 20px 0;
-    font-size: 0.85rem;
-    color: var(--text-dim);
-    background: rgba(255,255,255,0.05);
-    padding: 6px 12px;
-    border-radius: 20px;
-    display: inline-block;
-}
-
-#results-list {
-    list-style: none;
-    padding: 0;
-    max-height: 200px;
-    overflow-y: auto;
+.results-wrapper {
+    display: flex;
+    margin-top: 10px;
     background: var(--slot-bg);
-    border-radius: 12px;
-    margin-top: 15px;
+    border-radius: 16px;
+    height: 50vh;
+    min-height: 300px;
+    overflow: hidden;
+    border: 1px solid #334155;
+}
+
+.results-list {
+    flex: 1;
+    list-style: none;
+    padding: 0 15px;
+    margin: 0;
+    overflow-y: auto;
     text-align: left;
-    border: 1px solid rgba(255,255,255,0.05);
+    scrollbar-width: none;
 }
 
-#results-list li {
-    padding: 12px 16px;
+.results-list li {
+    padding: 12px 0;
     border-bottom: 1px solid #1e293b;
-    font-size: 0.95rem;
+    color: var(--text-dim);
+    font-size: 1.1rem;
 }
 
-.hidden { display: none; }
+.abc-sidebar {
+    width: 30px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255,255,255,0.05);
+    border-left: 1px solid #334155;
+}
 
-/* Gördítősáv stílus */
-#results-list::-webkit-scrollbar { width: 6px; }
-#results-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+.abc-letter {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--accent-blue);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.stats-badge {
+    margin: 10px 0;
+    color: var(--accent-orange);
+    font-weight: bold;
+}
+
+.hidden { display: none !important; }

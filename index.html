@@ -2,41 +2,44 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rendszám szójáték</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Szójáték</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Rendszám szójáték</h1>
-            <div class="subtitle">Alkoss szót a megadott betűkből!</div>
+            <h1 class="main-title">Szójáték</h1>
         </header>
         
         <div class="letters-box" id="letters-box">
             <div class="slot-container">
-                <div class="slot" id="slot1"><div class="letter">-</div></div>
+                <div class="slot" id="slot1"><div class="reel">-</div></div>
             </div>
             <div class="slot-container">
-                <div class="slot" id="slot2"><div class="letter">-</div></div>
+                <div class="slot" id="slot2"><div class="reel">-</div></div>
             </div>
             <div class="slot-container">
-                <div class="slot" id="slot3"><div class="letter">-</div></div>
+                <div class="slot" id="slot3"><div class="reel">-</div></div>
             </div>
         </div>
         
         <div class="controls-grid">
-            <button id="spin-btn" class="primary-btn">Új betűk generálása</button>
-            <button id="show-results-btn" class="secondary-btn" disabled>Megoldások mutatása</button>
+            <button id="spin-btn" class="primary-btn">Random</button>
+            <button id="show-results-btn" class="secondary-btn" disabled>Megoldások</button>
         </div>
 
         <div class="manual-section">
             <input type="text" id="manual-input" maxlength="3" placeholder="Saját betűk">
-            <button id="manual-btn" class="accent-btn">Keresés</button>
+            <button id="manual-btn" class="accent-btn">Mehet</button>
         </div>
 
-        <div id="stats" class="stats-badge">Várjunk a pörgetésre...</div>
-        <ul id="results-list" class="hidden"></ul>
+        <div id="stats" class="stats-badge hidden"></div>
+
+        <div class="results-wrapper hidden" id="results-wrapper">
+            <ul id="results-list" class="results-list"></ul>
+            <div class="abc-sidebar" id="abc-sidebar"></div>
+        </div>
     </div>
 
     <script src="szavak.js"></script>

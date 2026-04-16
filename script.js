@@ -1,6 +1,8 @@
 let currentMatches = [];
 let spinIntervals = [];
-const abc = "abcdefghijklmnopqrstuvwxyz";
+// Csak nagybetűk, hogy az animáció alatt is az látszódjon
+const abcLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const fullAbc = "AÁBCDEÉFGHIÍJKLMNOÓÖŐPQRSTUÚÜŰVWXYZ".split("");
 
 const normalizeText = (text) => {
     return text.toLowerCase()
@@ -11,7 +13,6 @@ const normalizeText = (text) => {
 function findMatches(target) {
     const l = normalizeText(target);
     const l1 = l[0], l2 = l[1], l3 = l[2];
-
     currentMatches = magyarSzavak.filter(word => {
         const simpleWord = normalizeText(word);
         const firstIdx = simpleWord.indexOf(l1);
@@ -26,85 +27,100 @@ function findMatches(target) {
 
 function updateUI(letters) {
     const lettersArray = letters.toUpperCase().split('');
-    for (let i = 0; i < 3; i++) {
-        const slot = document.getElementById(`slot${i+1}`);
-        slot.innerHTML = `<div class="letter">${lettersArray[i]}</div>`;
-    }
-
-    const stats = document.getElementById('stats');
-    stats.innerText = `${currentMatches.length} szót találtam ehhez: ${letters.toUpperCase()}`;
+    const slots = [document.getElementById('slot1'), document.getElementById('slot2'), document.getElementById('slot3')];
     
-    document.getElementById('show-results-btn').disabled = (currentMatches.length === 0);
-    const list = document.getElementById('results-list');
-    list.classList.add('hidden');
-    list.innerHTML = '';
-}
+    lettersArray.forEach((char, i) => {
+        slots[i].querySelector('.reel').innerText = char;
+    });
 
-function handleManual() {
-    const val = document.getElementById('manual-input').value.trim();
-    if (val.length !== 3) {
-        alert("PONTOSAN 3 betűre van szükség!");
-        return;
-    }
-    findMatches(val);
-    updateUI(val);
+    findMatches(letters);
+    const stats = document.getElementById('stats');
+    stats.innerText = `${currentMatches.length} találat`;
+    stats.classList.remove('hidden');
+    document.getElementById('show-results-btn').disabled = false;
+    // Csak akkor rejtjük el a listát, ha új betűket generálunk kézzel vagy gombbal
 }
 
 function startSpin() {
-    if (document.getElementById('letters-box').classList.contains('spinning')) return;
-
-    const lettersBox = document.getElementById('letters-box');
     const spinBtn = document.getElementById('spin-btn');
+    const slots = [document.getElementById('slot1'), document.getElementById('slot2'), document.getElementById('slot3')];
     
-    lettersBox.classList.add('spinning');
-    spinBtn.innerText = "Sorsolás...";
     spinBtn.disabled = true;
+    spinBtn.innerText = "...";
+    document.getElementById('results-wrapper').classList.add('hidden');
 
-    // Vizuális pörgés
-    for (let i = 0; i < 3; i++) {
-        const slot = document.getElementById(`slot${i+1}`);
-        spinIntervals[i] = setInterval(() => {
-            const randomLetter = abc[Math.floor(Math.random() * abc.length)];
-            slot.innerHTML = `
-                <div class="letter">${randomLetter.toUpperCase()}</div>
-                <div class="letter">${abc[Math.floor(Math.random() * abc.length)].toUpperCase()}</div>
-            `;
-        }, 60);
-    }
+    // Animáció indítása
+    slots.forEach(slot => {
+        slot.classList.add('spinning');
+        // Véletlenszerű nagybetű beállítása az animáció alatti villanáshoz
+        slot.querySelector('.reel').innerText = abcLetters[Math.floor(Math.random() * abcLetters.length)];
+    });
 
-    // Háttérben garancia a találatra
     let finalLetters = "";
     let foundValid = false;
     while (!foundValid) {
         finalLetters = "";
         for (let i = 0; i < 3; i++) {
-            finalLetters += abc[Math.floor(Math.random() * abc.length)];
+            finalLetters += abcLetters[Math.floor(Math.random() * abcLetters.length)];
         }
         if (findMatches(finalLetters).length > 0) foundValid = true;
     }
 
-    // Rövid pörgés (0.7 mp)
-    setTimeout(() => {
-        spinIntervals.forEach(interval => clearInterval(interval));
-        spinIntervals = [];
-        lettersBox.classList.remove('spinning');
-        spinBtn.disabled = false;
-        spinBtn.innerText = "Új betűk generálása";
-        updateUI(finalLetters);
-    }, 700);
+    // Sokkal gyorsabb leállás (300ms, 450ms, 600ms)
+    finalLetters.split('').forEach((char, i) => {
+        setTimeout(() => {
+            const slot = slots[i];
+            slot.classList.remove('spinning');
+            slot.querySelector('.reel').innerText = char;
+
+            if (i === 2) {
+                spinBtn.disabled = false;
+                spinBtn.innerText = "Random";
+                updateUI(finalLetters);
+            }
+        }, 300 + (i * 150));
+    });
 }
 
 function showResults() {
+    const wrapper = document.getElementById('results-wrapper');
     const list = document.getElementById('results-list');
+    const sidebar = document.getElementById('abc-sidebar');
+    
+    if (!wrapper.classList.contains('hidden')) {
+        wrapper.classList.add('hidden');
+        return;
+    }
+
     const sortedWords = [...currentMatches].sort((a, b) => a.localeCompare(b, 'hu'));
-    list.innerHTML = sortedWords.slice(0, 80000).map(w => `<li>${w}</li>`).join('');
-    list.classList.toggle('hidden');
+    list.innerHTML = sortedWords.map(w => `<li data-first="${w[0].toUpperCase()}">${w}</li>`).join('');
+    
+    const existingFirstLetters = new Set(sortedWords.map(w => w[0].toUpperCase()));
+    sidebar.innerHTML = fullAbc.map(char => `
+        <div class="abc-letter ${existingFirstLetters.has(char) ? '' : 'hidden'}" onclick="jumpTo('${char}')">${char}</div>
+    `).join('');
+
+    wrapper.classList.remove('hidden');
+    list.scrollTop = 0;
 }
 
-// Event Listeners
+function jumpTo(letter) {
+    const list = document.getElementById('results-list');
+    const target = list.querySelector(`li[data-first="${letter}"]`);
+    if (target) {
+        list.scrollTo({
+            top: target.offsetTop - list.offsetTop,
+            behavior: 'smooth'
+        });
+    }
+}
+
 document.getElementById('spin-btn').addEventListener('click', startSpin);
 document.getElementById('show-results-btn').addEventListener('click', showResults);
-document.getElementById('manual-btn').addEventListener('click', handleManual);
-document.getElementById('manual-input').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleManual();
+document.getElementById('manual-btn').addEventListener('click', () => {
+    const input = document.getElementById('manual-input').value;
+    if (input.length === 3) {
+        document.getElementById('results-wrapper').classList.add('hidden');
+        updateUI(input);
+    }
 });
