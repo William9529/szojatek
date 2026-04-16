@@ -3,43 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3 Betűs Szójáték - Slot Machine</title>
+    <title>Rendszám szójáték</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Magyar Szójáték</h1>
-        <p>Alkoss szót a betűk sorrendjének megtartásával!</p>
+        <header>
+            <h1>Rendszám szójáték</h1>
+            <div class="subtitle">Alkoss szót a megadott betűkből!</div>
+        </header>
         
         <div class="letters-box" id="letters-box">
             <div class="slot-container">
-                <div class="slot" id="slot1">
-                    <div class="letter">-</div>
-                </div>
+                <div class="slot" id="slot1"><div class="letter">-</div></div>
             </div>
             <div class="slot-container">
-                <div class="slot" id="slot2">
-                    <div class="letter">-</div>
-                </div>
+                <div class="slot" id="slot2"><div class="letter">-</div></div>
             </div>
             <div class="slot-container">
-                <div class="slot" id="slot3">
-                    <div class="letter">-</div>
-                </div>
+                <div class="slot" id="slot3"><div class="letter">-</div></div>
             </div>
         </div>
         
-        <div class="controls">
-            <button id="spin-btn">Pörgetés! 🎰</button>
-            <button id="show-results-btn" disabled>Megoldások mutatása</button>
+        <div class="controls-grid">
+            <button id="spin-btn" class="primary-btn">Új betűk generálása</button>
+            <button id="show-results-btn" class="secondary-btn" disabled>Megoldások mutatása</button>
         </div>
 
         <div class="manual-section">
             <input type="text" id="manual-input" maxlength="3" placeholder="Saját betűk">
-            <button id="manual-btn">Keresés</button>
+            <button id="manual-btn" class="accent-btn">Keresés</button>
         </div>
 
-        <div id="stats" class="stats">Indítsd el a pörgetést!</div>
+        <div id="stats" class="stats-badge">Várjunk a pörgetésre...</div>
         <ul id="results-list" class="hidden"></ul>
     </div>
 
